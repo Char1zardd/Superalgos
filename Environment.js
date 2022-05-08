@@ -1,5 +1,8 @@
 const path = require("path")
 
+// if you're going to update this file you must update the testfile  with the 
+// new environment variables as well (.tests/Environment.test.js)
+
 let basePath
 if (process.env.PACKAGED_PATH) {
   basePath = process.env.PACKAGED_PATH
