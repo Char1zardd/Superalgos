@@ -4,7 +4,7 @@ stages:
 Tests:
     only: develop
     stage: Tests & code quality
-    tags:
-        - Docker
+    # tags:
+    #     - Docker
     script:
         - echo 'hello'
