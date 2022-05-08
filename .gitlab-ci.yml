@@ -1,0 +1,10 @@
+stages:
+    - Tests & code quality
+
+Tests:
+    only: develop
+    stage: Tests & code quality
+    tags:
+        - Docker
+    script:
+        - echo 'hello'
