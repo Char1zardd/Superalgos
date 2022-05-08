@@ -12,18 +12,18 @@ const createShortcut = () => {
   // Windows Shortcuts
   if (os.platform() == "win32") {
     // Paths and Icon for Windows shortcuts
-    let target = path.join( __dirname, "launch-windows.bat")
-    let icon = path.join( __dirname, "superalgos.ico")
+    let target = path.join(__dirname, "launch-windows.bat")
+    let icon = path.join(__dirname, "superalgos.ico")
     let shortcutPaths = [
       path.join(os.homedir(), "Desktop", `${name}.lnk`),
-      path.join(os.homedir(), 
-                "AppData", 
-                "Roaming", 
-                "Microsoft", 
-                "Windows", 
-                "Start Menu", 
-                "Programs", 
-                `${name}.lnk`)
+      path.join(os.homedir(),
+        "AppData",
+        "Roaming",
+        "Microsoft",
+        "Windows",
+        "Start Menu",
+        "Programs",
+        `${name}.lnk`)
     ]
 
     // Place Shortcuts using powershell
@@ -48,22 +48,22 @@ const createShortcut = () => {
             console.log('')
             console.log(stdout)
           }
-      })
+        })
     }
 
     return "Shortcuts created for windows system"
 
-  // Linux Shortcuts
+    // Linux Shortcuts
   } else if (os.platform() == "linux") {
     // Check for Ubuntu
     let version = os.version()
 
     if (version.includes("Ubuntu")) {
       // Paths and Icon for Ubuntu shortcuts
-      let icon = path.join( __dirname,"..", "/Projects/Foundations/Icons/superalgos.png")
+      let icon = path.join(__dirname, "..", "/Projects/Foundations/Icons/superalgos.png")
 
       // Create .desktop shortcut file
-      fs.writeFileSync( `${name}.desktop`,
+      fs.writeFileSync(`${name}.desktop`,
         `[Desktop Entry]
         Type=Application
         Encoding=UTF-8
@@ -77,37 +77,37 @@ const createShortcut = () => {
       )
 
       // Set shortcut as executable
-      fs.chmodSync( `${name}.desktop`, "775" )
+      fs.chmodSync(`${name}.desktop`, "775")
 
       // Place shortcut in proper folders
       let command = `cp ${name}.desktop ~/Desktop/${name}.desktop & cp ${name}.desktop ~/.local/share/applications/${name}.desktop`
-        execSync(command,
-          (error) => {
-            if (error) {
-              console.log('')
-              console.log("There was an error installing a shortcut: ")
-              console.log('')
-              console.log( error )
-              return false
-            } else {
-              console.log('')
-              console.log("Shortcuts added successfully!")
-            }
-            // Remove temporary .desktop file
-            fs.unlinkSync( `${name}.desktop` )
+      execSync(command,
+        (error) => {
+          if (error) {
+            console.log('')
+            console.log("There was an error installing a shortcut: ")
+            console.log('')
+            console.log(error)
+            return false
+          } else {
+            console.log('')
+            console.log("Shortcuts added successfully!")
+          }
+          // Remove temporary .desktop file
+          fs.unlinkSync(`${name}.desktop`)
         })
-      
-      return "Shortcuts created for Ubuntu" 
+
+      return "Shortcuts created for Ubuntu"
 
 
     } else {
-      console.log( "Automatic shortcut creation is not yet supported on your flavor of linux.  If you would like to see this feature add, message @harrellbm on telegram or discord to ask how you can help!")
+      console.log("Automatic shortcut creation is not yet supported on your flavor of linux.  If you would like to see this feature add, message @harrellbm on telegram or discord to ask how you can help!")
       return 'Linux shortcuts supported for Ubuntu only'
     }
 
-  // Mac Shortcuts
+    // Mac Shortcuts
   } else if (os.platform() == "darwin") {
-    path.join( __dirname,"/superalgos.ico")
+    path.join(__dirname, "/superalgos.ico")
     const createShortcutCommand = `chmod +x ${name}.command & cp ${name}.command ~/Desktop/${name}.command`
     const installFileIconcommand = `npm install -g fileicon`
     const changeIconCommand = `./node_modules/fileicon/bin/fileicon set ~/Desktop/${name}.command ./Launch-Scripts/superalgos.ico`
@@ -115,7 +115,7 @@ const createShortcut = () => {
 
     try {
       // Create .desktop shortcut file
-        fs.writeFileSync( `${name}.command`,
+      fs.writeFileSync(`${name}.command`,
         `#!/bin/sh
         cd ${__dirname}
         cd ..
@@ -124,42 +124,42 @@ const createShortcut = () => {
       )
 
       // Place shortcut in proper folders
-      execSync( createShortcutCommand,{
+      execSync(createShortcutCommand, {
         timeout: 30000
       })
 
       // Remove temporary .command file
-      fs.unlinkSync( `${name}.command` )
+      fs.unlinkSync(`${name}.command`)
 
       //Install fileicon utility
       execSync(installFileIconcommand, {
-        stdio: 'inherit', 
+        stdio: 'inherit',
         timeout: 30000
       })
 
       //change Icon
       execSync(changeIconCommand, {
-        stdio: 'inherit', 
+        stdio: 'inherit',
         timeout: 30000
       })
 
       //Un-Install fileicon utility
       execSync(unInstallFileIconcommand, {
-        stdio: 'inherit', 
+        stdio: 'inherit',
         timeout: 30000
       })
     } catch (error) {
       console.log('')
       console.log("There was an error installing a shortcut: ")
       console.log('')
-      console.log( error )
+      console.log(error)
       return false
     }
 
     console.log("Shortcuts added successfully!")
     return 'Shortcuts created for Mac'
 
-  // Misc Operating System
+    // Misc Operating System
   } else {
     console.log("Automatic shortcut creation is not currently supported on your operating system.  If you would like to see your operating system added please reachout on discord or telegram to let the devs know.")
     return 'Shortcuts not supported on your system'
